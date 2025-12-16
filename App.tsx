@@ -550,7 +550,7 @@ const App: React.FC = () => {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={previewImage ? "Add a caption..." : "Message..."}
+                placeholder={previewImage ? "添加图片说明..." : "输入消息..."}
                 className="w-full bg-gray-800 text-gray-100 placeholder-gray-500 rounded-full py-3 px-5 focus:outline-none focus:ring-2 focus:ring-purple-600/50 border border-gray-700 transition-all"
               />
             </div>
