@@ -59,6 +59,27 @@ const responseSchema: Schema = {
   required: ["interestLevel", "replies", "thoughts"],
 };
 
+// Helper function to safely get API key from various environments
+const getApiKey = (): string | undefined => {
+  // 1. Try Vite (Standard for many React apps on Vercel)
+  // @ts-ignore
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
+    // @ts-ignore
+    return import.meta.env.VITE_API_KEY;
+  }
+  
+  // 2. Try Process Env (Node/CRA/Next.js)
+  // We check typeof process first to avoid ReferenceError in browsers that don't polyfill it
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env.API_KEY || 
+           process.env.REACT_APP_API_KEY || 
+           process.env.NEXT_PUBLIC_API_KEY ||
+           process.env.VITE_API_KEY;
+  }
+  
+  return undefined;
+};
+
 export const generateBotResponse = async (
   history: Message[],
   latestUserMessage: string,
@@ -67,9 +88,11 @@ export const generateBotResponse = async (
   latestImageBase64?: string
 ): Promise<BotResponse> => {
   try {
-    const apiKey = process.env.API_KEY;
+    const apiKey = getApiKey();
+    
     if (!apiKey) {
-      throw new Error("API_KEY is missing in environment variables");
+      console.error("API Key not found. Checked: import.meta.env.VITE_API_KEY, process.env.API_KEY, etc.");
+      throw new Error("API_KEY is missing. Please add VITE_API_KEY to your Vercel Environment Variables.");
     }
 
     const ai = new GoogleGenAI({ apiKey });
@@ -217,7 +240,7 @@ export const generateBotResponse = async (
     // Fallback response if API fails
     return {
       interestLevel: 5,
-      thoughts: "系统发生错误",
+      thoughts: "（系统连接失败，请检查API Key设置）",
       replies: ["..."],
     };
   }
