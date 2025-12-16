@@ -16,7 +16,7 @@ const ThoughtTooltip: React.FC<{ thoughts: string, align: 'left' | 'right' }> = 
       
       {/* Tooltip Content */}
       <div className={`absolute ${align === 'left' ? 'right-full mr-2' : 'left-full ml-2'} top-0 w-64 p-3 bg-black/90 backdrop-blur border border-gray-700 rounded-lg shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-30`}>
-        <div className="text-[10px] text-gray-400 font-mono mb-1 uppercase tracking-wider">Internal Monologue</div>
+        <div className="text-[10px] text-gray-400 font-mono mb-1 uppercase tracking-wider">内心OS</div>
         <div className="text-xs text-gray-200 leading-relaxed font-sans italic">
           "{thoughts}"
         </div>
